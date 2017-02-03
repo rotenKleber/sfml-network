@@ -14,7 +14,8 @@ int main()
 	std::cin >> port;
 	std::cout << std::endl;
 	
-	if(choice == 'c' || choice == 'C') {
+	if(choice == 'c' || choice == 'C')
+	{
 		// Client
 		
 		std::string ip;
@@ -40,21 +41,25 @@ int main()
 		
 		std::string msg;
 		
-		while(msg != "exit") {			
+		while(msg != "exit")
+		{			
 			std::cout << ">>> ";
 			std::cin >> msg;
 			std::cout << std::endl;
 			
 			// Checking to see if packages are available
-			if (selector.isReady(socket))
+			if (selector.wait(sf::seconds(10)))
 			{
-				std::string msgReceived;
-				sf::Packet receivePacket;
-				
-				socket.receive(receivePacket);
-				
-				receivePacket >> msgReceived;
-				std::cout << msgReceived << std::endl;
+				if (selector.isReady(socket))
+				{
+					std::string msgReceived;
+					sf::Packet receivePacket;
+					
+					socket.receive(receivePacket);
+					
+					receivePacket >> msgReceived;
+					std::cout << msgReceived << std::endl;
+				}
 			}
 			
 			// Sending packet
@@ -94,21 +99,25 @@ int main()
 		
 		std::string msg;
 		
-		while(msg != "exit") {			
+		while(msg != "exit")
+		{			
 			std::cout << ">>> ";
 			std::cin >> msg;
 			std::cout << std::endl;
 			
 			// Checking to see if packages are available
-			if (selector.isReady(client))
+			if (selector.wait(sf::seconds(10)))
 			{
-				std::string msgReceived;
-				sf::Packet receivePacket;
-				
-				client.receive(receivePacket);
-				
-				receivePacket >> msgReceived;
-				std::cout << msgReceived << std::endl;
+				if (selector.isReady(client))
+				{
+					std::string msgReceived;
+					sf::Packet receivePacket;
+					
+					client.receive(receivePacket);
+					
+					receivePacket >> msgReceived;
+					std::cout << msgReceived << std::endl;
+				}
 			}
 			
 			// Sending packet
