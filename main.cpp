@@ -7,14 +7,14 @@ int main()
 {
 	char choice;
 	int port;
-	std::cout << "(C)onnect / (H)ost: ";
+	std::cout << "(C)lient / (S)erver: ";
 	std::cin >> choice;
 	
 	std::cout << "\nEnter Port: ";
 	std::cin >> port;
 	std::cout << std::endl;
 	
-	if(choice == 'h' || choice == 'H') {
+	if(choice == 'c' || choice == 'C') {
 		std::string ip;
 		
 		std::cout << "Enter IP: ";
@@ -44,15 +44,13 @@ int main()
 			std::cout << "Client connection failed.\n";
 		}
 		
-		std::cout << "Sending package.\n";
+		std::string messageReceived;
+		sf::Packet receivePacket;
 		
-		std::string message = "Hello";
-		sf::Packet sendPacket;
-		sendPacket << message;
+		socket.receive(receivePacket);
 		
-		socket.send(sendPacket);
-		
-		std::cout << "Package sent.\n";
+		receivePacket >> messageReceived;
+		std::cout << "Package received: " << messageReceived << std::endl;
 		
 		std::cout << "Terminating.\n";
 	} else {		
@@ -71,13 +69,11 @@ int main()
 			std::cout << "Client connection failed.\n";
 		}
 		
-		std::string messageReceived;
-		sf::Packet receivePacket;
+		std::string message = "Hello";
+		sf::Packet sendPacket;
+		sendPacket << message;
 		
-		client.receive(receivePacket);
-		
-		receivePacket >> messageReceived;
-		std::cout << "Package received: " << messageReceived << std::endl;
+		client.send(sendPacket);
 		
 		std::cout << "Terminating.\n";
 	}
