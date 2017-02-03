@@ -31,6 +31,12 @@ int main()
 			std::cout << "Connection failed.\n";
 		}
 		
+		// Setting up socket selector
+		
+		sf::SocketSelector selector;
+		selector.add(socket);
+		
+		// Main loop
 		
 		std::string msg;
 		
@@ -39,14 +45,17 @@ int main()
 			std::cin >> msg;
 			std::cout << std::endl;
 			
-			// Receiving packet
-			std::string msgReceived;
-			sf::Packet receivePacket;
-			
-			socket.receive(receivePacket);
-			
-			receivePacket >> msgReceived;
-			std::cout << msgReceived << std::endl;
+			// Checking to see if packages are available
+			if (selector.isReady(socket))
+			{
+				std::string msgReceived;
+				sf::Packet receivePacket;
+				
+				socket.receive(receivePacket);
+				
+				receivePacket >> msgReceived;
+				std::cout << msgReceived << std::endl;
+			}
 			
 			// Sending packet
 			sf::Packet sendPacket;
@@ -67,12 +76,21 @@ int main()
 			std::cout << "Binding failed.\n";
 		}
 
+		std::cout << "Waiting for connection...\n";
+
 		// accept a new connection
 		sf::TcpSocket client;
 		if (listener.accept(client) != sf::Socket::Done)
 		{
 			std::cout << "Client connection failed.\n";
 		}
+		
+		// Setting up socket selector
+		
+		sf::SocketSelector selector;
+		selector.add(client);
+		
+		// Main loop
 		
 		std::string msg;
 		
@@ -81,14 +99,17 @@ int main()
 			std::cin >> msg;
 			std::cout << std::endl;
 			
-			// Receiving packet
-			std::string msgReceived;
-			sf::Packet receivePacket;
-			
-			client.receive(receivePacket);
-			
-			receivePacket >> msgReceived;
-			std::cout << msgReceived << std::endl;
+			// Checking to see if packages are available
+			if (selector.isReady(client))
+			{
+				std::string msgReceived;
+				sf::Packet receivePacket;
+				
+				client.receive(receivePacket);
+				
+				receivePacket >> msgReceived;
+				std::cout << msgReceived << std::endl;
+			}
 			
 			// Sending packet
 			sf::Packet sendPacket;
