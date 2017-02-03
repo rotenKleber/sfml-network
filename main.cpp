@@ -54,14 +54,6 @@ int main()
 		
 		std::cout << "Package sent.\n";
 		
-		std::string messageReceived;
-		sf::Packet receivePacket;
-		
-		socket.receive(receivePacket);
-		
-		receivePacket >> messageReceived;
-		std::cout << "Package received: " << messageReceived << std::endl;
-		
 		std::cout << "Terminating.\n";
 	} else {		
 		sf::TcpListener listener;
@@ -78,6 +70,16 @@ int main()
 		{
 			std::cout << "Client connection failed.\n";
 		}
+		
+		std::string messageReceived;
+		sf::Packet receivePacket;
+		
+		client.receive(receivePacket);
+		
+		receivePacket >> messageReceived;
+		std::cout << "Package received: " << messageReceived << std::endl;
+		
+		std::cout << "Terminating.\n";
 	}
     return 0;
 }
