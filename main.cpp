@@ -31,13 +31,28 @@ int main()
 			std::cout << "Connection failed.\n";
 		}
 		
-		std::string messageReceived;
-		sf::Packet receivePacket;
 		
-		socket.receive(receivePacket);
+		std::string msg;
 		
-		receivePacket >> messageReceived;
-		std::cout << "Package received: " << messageReceived << std::endl;
+		while(msg != "exit") {			
+			std::cout << ">>> ";
+			std::cin >> msg;
+			std::cout << std::endl;
+			
+			// Receiving packet
+			std::string msgReceived;
+			sf::Packet receivePacket;
+			
+			socket.receive(receivePacket);
+			
+			receivePacket >> msgReceived;
+			std::cout << msgReceived << std::endl;
+			
+			// Sending packet
+			sf::Packet sendPacket;
+			sendPacket << msg;
+			socket.send(sendPacket);
+		}
 		
 		std::cout << "Terminating.\n";
 	
@@ -59,11 +74,27 @@ int main()
 			std::cout << "Client connection failed.\n";
 		}
 		
-		std::string message = "Hello";
-		sf::Packet sendPacket;
-		sendPacket << message;
+		std::string msg;
 		
-		client.send(sendPacket);
+		while(msg != "exit") {			
+			std::cout << ">>> ";
+			std::cin >> msg;
+			std::cout << std::endl;
+			
+			// Receiving packet
+			std::string msgReceived;
+			sf::Packet receivePacket;
+			
+			client.receive(receivePacket);
+			
+			receivePacket >> msgReceived;
+			std::cout << msgReceived << std::endl;
+			
+			// Sending packet
+			sf::Packet sendPacket;
+			sendPacket << msg;
+			client.send(sendPacket);
+		}
 		
 		std::cout << "Terminating.\n";
 	}
