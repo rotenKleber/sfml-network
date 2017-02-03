@@ -5,58 +5,80 @@
 
 int main()
 {
-	std::string ip;
+	char choice;
 	int port;
-	
-	std::cout << "Enter IP: ";
-	std::cin >> ip;
+	std::cout << "(C)onnect / (H)ost: ";
+	std::cin >> choice;
 	
 	std::cout << "\nEnter Port: ";
 	std::cin >> port;
-	
 	std::cout << std::endl;
 	
-	sf::TcpSocket socket;
-	sf::Socket::Status status = socket.connect(ip, port);
-	if (status != sf::Socket::Done)
-	{
-		std::cout << "Connection failed.\n";
-	}
-	
-	sf::TcpListener listener;
+	if(choice == 'h' || choice == 'H') {
+		std::string ip;
+		
+		std::cout << "Enter IP: ";
+		std::cin >> ip;
+		
+		std::cout << std::endl;
+		
+		sf::TcpSocket socket;
+		sf::Socket::Status status = socket.connect(ip, port);
+		if (status != sf::Socket::Done)
+		{
+			std::cout << "Connection failed.\n";
+		}
+		
+		sf::TcpListener listener;
 
-	// bind the listener to a port
-	if (listener.listen(port) != sf::Socket::Done)
-	{
-		std::cout << "Binding failed.\n";
-	}
+		// bind the listener to a port
+		if (listener.listen(port) != sf::Socket::Done)
+		{
+			std::cout << "Binding failed.\n";
+		}
 
-	// accept a new connection
-	sf::TcpSocket client;
-	if (listener.accept(client) != sf::Socket::Done)
-	{
-		std::cout << "Client connection failed.\n";
+		// accept a new connection
+		sf::TcpSocket client;
+		if (listener.accept(client) != sf::Socket::Done)
+		{
+			std::cout << "Client connection failed.\n";
+		}
+		
+		std::cout << "Sending package.\n";
+		
+		std::string message = "Hello";
+		sf::Packet sendPacket;
+		sendPacket << message;
+		
+		socket.send(sendPacket);
+		
+		std::cout << "Package sent.\n";
+		
+		std::string messageReceived;
+		sf::Packet receivePacket;
+		
+		socket.receive(receivePacket);
+		
+		receivePacket >> messageReceived;
+		std::cout << "Package received: " << messageReceived << std::endl;
+		
+		std::cout << "Terminating.\n";
+	} else {		
+		sf::TcpListener listener;
+
+		// bind the listener to a port
+		if (listener.listen(port) != sf::Socket::Done)
+		{
+			std::cout << "Binding failed.\n";
+		}
+
+		// accept a new connection
+		sf::TcpSocket client;
+		if (listener.accept(client) != sf::Socket::Done)
+		{
+			std::cout << "Client connection failed.\n";
+		}
 	}
-	
-	std::cout << "Sending package.\n";
-	
-	std::string message = "Hello";
-	sf::Packet sendPacket;
-	sendPacket << message;
-	
-	socket.send(sendPacket);
-	
-	std::cout << "Package sent.\n";
-	
-	std::string messageReceived;
-	sf::Packet receivePacket;
-	
-	socket.receive(receivePacket);
-	
-	receivePacket >> messageReceived;
-	std::cout << "Package received: " << messageReceived << std::endl;
-	
-	std::cout << "Terminating.\n";
     return 0;
 }
 
