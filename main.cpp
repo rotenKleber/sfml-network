@@ -15,6 +15,8 @@ int main()
 	std::cout << std::endl;
 	
 	if(choice == 'c' || choice == 'C') {
+		// Client
+		
 		std::string ip;
 		
 		std::cout << "Enter IP: ";
@@ -29,21 +31,6 @@ int main()
 			std::cout << "Connection failed.\n";
 		}
 		
-		sf::TcpListener listener;
-
-		// bind the listener to a port
-		if (listener.listen(port) != sf::Socket::Done)
-		{
-			std::cout << "Binding failed.\n";
-		}
-
-		// accept a new connection
-		sf::TcpSocket client;
-		if (listener.accept(client) != sf::Socket::Done)
-		{
-			std::cout << "Client connection failed.\n";
-		}
-		
 		std::string messageReceived;
 		sf::Packet receivePacket;
 		
@@ -53,7 +40,10 @@ int main()
 		std::cout << "Package received: " << messageReceived << std::endl;
 		
 		std::cout << "Terminating.\n";
+	
 	} else {		
+		// Server
+		
 		sf::TcpListener listener;
 
 		// bind the listener to a port
